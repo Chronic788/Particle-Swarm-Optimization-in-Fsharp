@@ -64,8 +64,6 @@ let rec updatePositions (particles : list<Particle>, updatedParticles : list<Par
 
     // Define the position update function
     let updatePosition (particle : Particle) =
-        particle.position.x <| 
-        particle.position.y <| particle.position.y + particle.yVelocity
         let position = particle.position
         { particle with position = {position with x = particle.position.x + particle.xVelocity; y = particle.position.y + particle.yVelocity}}
 
