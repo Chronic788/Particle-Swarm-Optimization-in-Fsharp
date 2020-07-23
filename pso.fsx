@@ -8,19 +8,23 @@
 // Utilities
 let random = System.Random()
 
+// Simulation
+let maxiumumIterations = 100
+
 // Learning factors
 // -------------------------------------------------------------------------------------------------------
 // - Research shows that c1 and c2 should generally be equal and suggest that the best value is '2'
 let c1 = 2.0
 let c2 = 2.0
 
-// Global best
-let globalBest = 9999999999999999.0
-
 // Types
-type Position = {x: float; y: float}
+type Position = {x: float; y: float; fitness: float}
 type Particle = {position: Position; xVelocity: float; yVelocity: float; personalBest : Position}
 type Swarm = {particles: list<Particle>; globalBest: Particle}
+
+// Global best
+let globalBest = 
+    { position = {x = -1.0; y = -1.0; fitness = 9999999999.0}; xVelocity = random.NextDouble(); yVelocity = random.NextDouble(); personalBest = {x = -1.0; y = -1.0; fitness = 99999999.0}}
 
 let rec updateParticleVelocities (particles : list<Particle>, updatedParticles : list<Particle>, swarm : Swarm) =
 
@@ -35,9 +39,7 @@ let rec updateParticleVelocities (particles : list<Particle>, updatedParticles :
             let globalBestTerm = 
                 c2 * random.NextDouble() * (swarm.globalBest.position.x - particle.position.x)
 
-            //Is this how to update a value?
-            particle.xVelocity <| presentVelocityTerm + personalBestTerm + globalBestTerm
-            particle
+            { particle with xVelocity = presentVelocityTerm + personalBestTerm + globalBestTerm}
 
         let updateYVelocity (particle : Particle) =
             let presentVelocityTerm = 
@@ -47,9 +49,7 @@ let rec updateParticleVelocities (particles : list<Particle>, updatedParticles :
             let globalBestTerm = 
                 c2 * random.NextDouble() * (swarm.globalBest.position.y - particle.position.y)
 
-            // Is this how to update a value??
-            particle.yVelocity <| presentVelocityTerm + personalBestTerm + globalBestTerm
-            particle
+            { particle with yVelocity = presentVelocityTerm + personalBestTerm + globalBestTerm}
 
         let update =
             particle
@@ -81,3 +81,9 @@ let rec updatePositions (particles : list<Particle>, updatedParticles : list<Par
 let initializeParticles(particles : list<Particle>, initializedParticles : list<Particle>, swarm : Swarm) =
     //This is a stub
     swarm
+
+let findGBest(particles : list<Particle>, currentBest : Particle) =
+
+    let currentParticle = particles.Head
+    
+    if currentParticle.personalBest.
