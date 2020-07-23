@@ -10,6 +10,8 @@ let random = System.Random()
 
 // Simulation
 let maxiumumIterations = 100
+let fieldWidth = 500.0
+let fieldHeight = 500.0
 
 // Learning factors
 // -------------------------------------------------------------------------------------------------------
@@ -23,10 +25,15 @@ type Particle = {position: Position; xVelocity: float; yVelocity: float; persona
 type Swarm = {particles: list<Particle>; globalBest: Particle}
 
 // Global best
-let globalBest = 
-    { position = {x = -1.0; y = -1.0; fitness = 9999999999.0}; xVelocity = random.NextDouble(); yVelocity = random.NextDouble(); personalBest = {x = -1.0; y = -1.0; fitness = 99999999.0}}
+let globalBest = { 
+                  position = {x = -1.0; y = -1.0; fitness = 9999999999.0}; 
+                  xVelocity = random.NextDouble(); 
+                  yVelocity = random.NextDouble(); 
+                  personalBest = {x = -1.0; y = -1.0; fitness = 99999999.0}}
 
-let updateParticleVelocities (particles : list<Particle>, swarm : Swarm) =
+let updateParticleVelocities (swarm : Swarm) =
+
+    let particles = swarm.particles
 
     let updateVelocities (particle : Particle) =
 
@@ -55,7 +62,9 @@ let updateParticleVelocities (particles : list<Particle>, swarm : Swarm) =
     { swarm with particles = List.map (fun particle -> updateVelocities particle) particles}
 
 // Implement bounds check when I have the field implemented    
-let rec updatePositions (particles : list<Particle>, swarm : Swarm) = 
+let rec updatePositions (swarm : Swarm) = 
+
+    let particles = swarm.particles
 
     // Define the position update function
     let updatePosition (particle : Particle) =
@@ -65,12 +74,26 @@ let rec updatePositions (particles : list<Particle>, swarm : Swarm) =
     { swarm with particles = List.map (fun particle -> updatePosition particle) particles}
 
     
-let initializeParticles(particles : list<Particle>, initializedParticles : list<Particle>, swarm : Swarm) =
-    //This is a stub
-    swarm
-
-let findGBest(particles : list<Particle>, currentBest : Particle) =
-
-    let currentParticle = particles.Head
+let initializeParticles(swarm : Swarm, particleCount : int) =
     
+    let newParticles = [
+        for i in 1 .. particleCount do
+            let randomPositon = {
+                                 x = random.NextDouble() * fieldWidth;
+                                 y = random.NextDouble() * fieldHeight;
+                                 fitness = 9999999999.0;
+                                }
+            yield { 
+                   position = randomPositon;
+                   xVelocity = random.NextDouble();
+                   yVelocity = random.NextDouble();
+                   personalBest = randomPositon;
+                  }
+    ]
+
+    { swarm with particles = newParticles }
+
+let findGBest(particles : list<Particle>, swarm : Swarm) =
+
+
     if currentParticle.personalBest.
