@@ -39,7 +39,7 @@ let rec updateParticleVelocities (particles : list<Particle>, updatedParticles :
             let globalBestTerm = 
                 c2 * random.NextDouble() * (swarm.globalBest.position.x - particle.position.x)
 
-            { particle with xVelocity = presentVelocityTerm + personalBestTerm + globalBestTerm}
+            presentVelocityTerm + personalBestTerm + globalBestTerm
 
         let updateYVelocity (particle : Particle) =
             let presentVelocityTerm = 
@@ -49,14 +49,9 @@ let rec updateParticleVelocities (particles : list<Particle>, updatedParticles :
             let globalBestTerm = 
                 c2 * random.NextDouble() * (swarm.globalBest.position.y - particle.position.y)
 
-            { particle with yVelocity = presentVelocityTerm + personalBestTerm + globalBestTerm}
+            presentVelocityTerm + personalBestTerm + globalBestTerm
 
-        let update =
-            particle
-            |> updateXVelocity
-            |> updateYVelocity
-
-        update particle
+        { particle with xVelocity = (updateXVelocity particle); yVelocity = (updateYVelocity particle)}
 
     if particles.Length = 0 then
         updatedParticles
@@ -69,8 +64,10 @@ let rec updatePositions (particles : list<Particle>, updatedParticles : list<Par
 
     // Define the position update function
     let updatePosition (particle : Particle) =
-        particle.position.x <| particle.position.x + particle.xVelocity
+        particle.position.x <| 
         particle.position.y <| particle.position.y + particle.yVelocity
+        let position = particle.position
+        { particle with position = {position with x = particle.position.x + particle.xVelocity; y = particle.position.y + particle.yVelocity}}
 
     if particles.Length = 0 then
         updatedParticles
