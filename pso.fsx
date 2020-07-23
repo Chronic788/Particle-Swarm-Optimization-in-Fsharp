@@ -61,9 +61,21 @@ let rec updateParticleVelocities (particles : list<Particle>, updatedParticles :
     if particles.Length = 0 then
         updatedParticles
     else
+        //Why is this saying that
         updateParticleVelocities particles.Tail updatedParticles::(updateVelocities particles.Head) swarm
         
+let rec updatePositions (particles : list<Particle>, updatedParticles : list<Particle>, swarm : Swarm) = 
+
+    // Define the position update function
+    let updatePosition (particle : Particle) =
+        particle.position.x <| particle.position.x + particle.xVelocity
+        particle.position.y <| particle.position.y + particle.yVelocity
+
+    if particles.Length = 0 then
+        updatedParticles
+    else
+        updatePositions particles.Tail updatedParticles::(updatePosition particles.Head) swarm
 
     
     
-// Bounds check for velocity update
+// Bounds check for position update
