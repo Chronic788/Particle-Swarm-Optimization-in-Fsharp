@@ -93,7 +93,5 @@ let initializeParticles(swarm : Swarm, particleCount : int) =
 
     { swarm with particles = newParticles }
 
-let findGBest(particles : list<Particle>, swarm : Swarm) =
-
-
-    if currentParticle.personalBest.
+let calculateFitnesses (swarm : Swarm) =
+    printfn "I am a stub. Implement me when you implement the json of the simulation state."
