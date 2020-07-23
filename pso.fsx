@@ -63,7 +63,8 @@ let rec updateParticleVelocities (particles : list<Particle>, updatedParticles :
     else
         //Why is this saying that
         updateParticleVelocities particles.Tail updatedParticles::(updateVelocities particles.Head) swarm
-        
+
+// Implement bounds check when I have the field implemented    
 let rec updatePositions (particles : list<Particle>, updatedParticles : list<Particle>, swarm : Swarm) = 
 
     // Define the position update function
@@ -77,5 +78,6 @@ let rec updatePositions (particles : list<Particle>, updatedParticles : list<Par
         updatePositions particles.Tail updatedParticles::(updatePosition particles.Head) swarm
 
     
-    
-// Bounds check for position update
+let initializeParticles(particles : list<Particle>, initializedParticles : list<Particle>, swarm : Swarm) =
+    //This is a stub
+    swarm
