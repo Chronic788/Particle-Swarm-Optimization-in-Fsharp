@@ -26,9 +26,8 @@ type Swarm = {particles: list<Particle>; globalBest: Particle}
 let globalBest = 
     { position = {x = -1.0; y = -1.0; fitness = 9999999999.0}; xVelocity = random.NextDouble(); yVelocity = random.NextDouble(); personalBest = {x = -1.0; y = -1.0; fitness = 99999999.0}}
 
-let rec updateParticleVelocities (particles : list<Particle>, updatedParticles : list<Particle>, swarm : Swarm) =
+let updateParticleVelocities (particles : list<Particle>, swarm : Swarm) =
 
-    // Define the velocity update functions for the x and y axis
     let updateVelocities (particle : Particle) =
 
         let updateXVelocity (particle : Particle) =
@@ -53,24 +52,17 @@ let rec updateParticleVelocities (particles : list<Particle>, updatedParticles :
 
         { particle with xVelocity = (updateXVelocity particle); yVelocity = (updateYVelocity particle)}
 
-    if particles.Length = 0 then
-        updatedParticles
-    else
-        //Why is this saying that
-        updateParticleVelocities particles.Tail updatedParticles::(updateVelocities particles.Head) swarm
+    { swarm with particles = List.map (fun particle -> updateVelocities particle) particles}
 
 // Implement bounds check when I have the field implemented    
-let rec updatePositions (particles : list<Particle>, updatedParticles : list<Particle>, swarm : Swarm) = 
+let rec updatePositions (particles : list<Particle>, swarm : Swarm) = 
 
     // Define the position update function
     let updatePosition (particle : Particle) =
         let position = particle.position
         { particle with position = {position with x = particle.position.x + particle.xVelocity; y = particle.position.y + particle.yVelocity}}
 
-    if particles.Length = 0 then
-        updatedParticles
-    else
-        updatePositions particles.Tail updatedParticles::(updatePosition particles.Head) swarm
+    { swarm with particles = List.map (fun particle -> updatePosition particle) particles}
 
     
 let initializeParticles(particles : list<Particle>, initializedParticles : list<Particle>, swarm : Swarm) =
