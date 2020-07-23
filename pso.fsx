@@ -74,7 +74,7 @@ let rec updatePositions (swarm : Swarm) =
     { swarm with particles = List.map (fun particle -> updatePosition particle) particles}
 
     
-let initializeParticles(swarm : Swarm, particleCount : int) =
+let initializeSwarm(swarm : Swarm, particleCount : int) =
     
     let newParticles = [
         for i in 1 .. particleCount do
@@ -91,7 +91,30 @@ let initializeParticles(swarm : Swarm, particleCount : int) =
                   }
     ]
 
-    { swarm with particles = newParticles }
+    { swarm with particles = newParticles; globalBest = newParticles.[0] }
 
-let calculateFitnesses (swarm : Swarm) =
+let calculateFitnessesAndBests (swarm : Swarm) =
     printfn "I am a stub. Implement me when you implement the json of the simulation state."
+
+let chooseGlobalBest (swarm : Swarm)= 
+    printfn " I am a stub. Implement me next"
+
+let simulate =
+    let swarm = initializeSwarm({particles = []; globalBest = {}})
+
+    let mutable currentIterations = 0
+
+    let simulateSwarm =
+        swarm
+        |> calculateFitnessesAndBests
+        |> chooseGlobalBest
+        |> updateParticleVelocities
+        |> updatePositions
+
+    for i in 0 .. maxiumumIterations do
+        simulateSwarm
+
+[<EntryPoint>]
+let main (args : string[]) = 
+    simulate
+    0
